@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  db:
+    image: mongo
+  
+  web:
+    build: ./stock-app-backend
+    command: "python3 api.py"
+    volumes:
+      - ./stock-app-backend:/code
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+      
+  app:
+    build: ./stock-app-react
+    volumes:
+      - ./stock-app-react:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=development
+
